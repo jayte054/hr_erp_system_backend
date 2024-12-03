@@ -2,6 +2,7 @@ import mongoose, { Schema, model, Document } from 'mongoose';
 import { Admin } from './adminModel'; // Adjust the import based on your project structure
 
 export interface Employee extends Document {
+    employeeId: string;
     name: string;
     email: string;
     password: string;
@@ -13,6 +14,7 @@ export interface Employee extends Document {
 }
 
 const employeeSchema = new Schema<Employee>({
+    id: { type: String, required: true },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },

@@ -20,9 +20,8 @@ export const AdminSignupValidationSchema  = Joi.object({
     name: Joi.string().min(3).max(30).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
-    salt: Joi.string().required(),
+    salary: Joi.number().required(),
     department:Joi.string().required(),
-    role: Joi.string().required(),
 })
 
 export const AdminSignInValidationSchema = Joi.object({
@@ -35,7 +34,5 @@ export const employeeSignupValidationSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
     department: Joi.string().required(),
-    role: Joi.string().required(),
-    joiningDate: Joi.date().required(),
     salary: Joi.number().required(),
 });

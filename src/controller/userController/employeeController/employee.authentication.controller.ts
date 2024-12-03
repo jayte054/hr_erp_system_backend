@@ -2,13 +2,19 @@ import express, { Request, Response } from 'express';
 import { EmployeeModel } from '../../../models/employeeModel'; 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { generateSalt } from '../../../utils/authenticationUtils';
+import { employeeSignupValidationSchema, generateSalt } from '../../../utils/authenticationUtils';
 import { EmployeeProfileModel } from '../../../models/employeeProfileModel';
+import {v4 as uuid} from 'uuid'
 
 
 export const adminEmployeeSignup = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { name, email, password, department, role, joiningDate, salary } = req.body; // No need to include adminId here
+    const { name, email, password, department, salary } = req.body; // No need to include adminId here
+    
+    const {error} = employeeSignupValidationSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ error: error.details[0].message }); // Send validation error message
+    }
 
     const token: any = req.header('Authorization')?.replace('Bearer ', '')
 
@@ -33,22 +39,24 @@ export const adminEmployeeSignup = async (req: Request, res: Response): Promise<
 
     // Create a new employee
     const newEmployee = new EmployeeModel({
+      id: uuid(),
       name,
       email,
       password: hashedPassword,
       department,
-      role,
-      joiningDate,
+      joiningDate: new Date(),
+      role: "employee",
       salary, 
       adminId, 
     });
 
     const newEmployeeProfile = new EmployeeProfileModel({
+        employeeId: newEmployee.id,
         name,
         email,
         department,
-        role,
-        joiningDate,
+        role: "employee",
+        joiningDate: new Date(),
         salary, 
     })
 
@@ -99,7 +107,7 @@ export const employeeSignin = async (req: Request, res: Response): Promise<Respo
 
     try {
         //find employee
-        const employee = await EmployeeModel.findOne({where: {email}})
+        const employee = await EmployeeModel.findOne({email})
         if (!employee) {
             return res.status(404).json({message: 'employee not found'})
         }
@@ -107,17 +115,18 @@ export const employeeSignin = async (req: Request, res: Response): Promise<Respo
         //compare password
         const comparePassword = await bcrypt.compare(password, employee.password);
         if (!comparePassword) {
-            res.status(401).json({message: 'current password is incorrect'})
+           return res.status(401).json({message: 'current password is incorrect'})
         }
 
         if (!process.env.JWT_SECRET) {
-            throw new Error('JWT_SECRET is not defined in environment variables');
+            return new Error('JWT_SECRET is not defined in environment variables');
         }
 
         //Generate Token 
         const token = jwt.sign(
         {
             id: employee._id,
+            employeeId: employee.id,
             email: employee.email,
             role: employee.role,
         }, 

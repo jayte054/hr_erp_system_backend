@@ -6,7 +6,7 @@ import { adminSignup, adminSignin } from '../controller/userController/adminCont
 export const authRoute = express.Router()
 
 authRoute.post('/signup', adminEmployeeSignup )
-authRoute.post('/signup', employeeSignin )
+authRoute.post('/signin', employeeSignin )
 authRoute.post('/adminSignup', adminSignup )
 authRoute.post('/adminSignin', adminSignin )
-authRoute.patch('/changePassword', changePassword)
+authRoute.patch('/changePassword/:id', changePassword)

@@ -3,32 +3,48 @@ import bcrypt from 'bcrypt';
 import { AdminSignInValidationSchema, AdminSignupValidationSchema, generatePassword, signInError, signupError } from "../../../utils/authenticationUtils";
 import { AdminModel, Admin } from '../../../models/adminModel';
 import jwt from 'jsonwebtoken';
+import {v4 as uuid} from 'uuid'
+import { EmployeeProfileModel } from '../../../models/employeeProfileModel';
 
 export const adminSignup = async (req: Request, res: Response): Promise<any> => {
     try {
-        const {error} = AdminSignupValidationSchema.validate(req.body);
+        const {name, email, password, department,salary} = req.body;
 
+        const salt = await bcrypt.genSalt();
+        const {error} = AdminSignupValidationSchema.validate(req.body);
         if (error) {
             return res.status(400).json({ error: error.details[0].message }); // Send validation error message
         }
 
-        const {name, email, password, department, role} = req.body;
-
-        const salt = await bcrypt.genSalt()
         const hashedPassword = await generatePassword(password, salt);
 
         const checkAdmin = await AdminModel.findOne({where: email})
 
         if (!checkAdmin) {
         const newAdmin: Admin = new AdminModel({
+            id: uuid(),
             name,
             email,
             salt,
             password: hashedPassword,
-            role
+            department,
+            role: "admin",
+            salary,
         }) 
+        console.log(newAdmin)
+        const newadminProfile = new EmployeeProfileModel({
+            employeeId: newAdmin.id,
+            name,
+            email,
+            department,
+            role: "employee",
+            joiningDate: new Date(),
+            salary
+        })
+       console.log(newadminProfile)
 
          const admin = await newAdmin.save()
+         await newadminProfile.save()
 
          return res.status(201).json({
             message: 'admin created successfully',
@@ -41,6 +57,7 @@ export const adminSignup = async (req: Request, res: Response): Promise<any> => 
     }
 }
 
+
 export const adminSignin = async(req: Request, res: Response): Promise<any> =>  {
     const {email, password} = req.body;
 
@@ -51,7 +68,10 @@ export const adminSignin = async(req: Request, res: Response): Promise<any> =>  
     }
 
     try {
-        const admin = await AdminModel.findOne({where: {email}});
+        // console.log(await AdminModel.find())
+        console.log(email, password)
+        const admin = await AdminModel.findOne({email: email.trim().toLowerCase()});
+        console.log(admin)
 
         if(!admin) {
             return res.status(401).json({

@@ -9,6 +9,10 @@ export interface Admin extends Document {
 }
 
 export const AdminSchema = new Schema({
+    id: {
+        type: String,
+        required: true,
+    },
     name: {
         type: String,
         required: true,
