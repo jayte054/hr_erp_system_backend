@@ -10,29 +10,29 @@ dotenv.config();
 
 const app = express();
 
-// app.use(cors());
+app.use(cors());
 
-const corsOptions = {
-  origin: (origin: any, callback: any) => {
-    const allowedOrigins = [
-      "https://hr-erp-system-frontend.vercel.app",
-      "http://localhost:3000",
-    ];
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  preFlightContinue: false,
-  optionsSuccessStatus: 204,
-};
+// const corsOptions = {
+//   origin: (origin: any, callback: any) => {
+//     const allowedOrigins = [
+//       "https://hr-erp-system-frontend.vercel.app",
+//       "http://localhost:3000",
+//     ];
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+//   preFlightContinue: false,
+//   optionsSuccessStatus: 204,
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
-app.options('*', cors(corsOptions))
+// app.options('*', cors(corsOptions))
 
 mongoDbConnection()
 
