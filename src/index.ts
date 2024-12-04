@@ -13,12 +13,12 @@ const app = express();
 // app.use(cors());
 
 const corsOptions = {
-    origin: "*",
-    methods: ['GET','HEAD','PUT','PATCH','POST','DELETE'],
-    allowedHeaders : ['Content-Type', 'Authorization'],
-    preFlightContinue : false,
-    optionsSuccessStatus : 204
-}
+  origin: "https://hr-erp-system-frontend.vercel.app/",
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  preFlightContinue: false,
+  optionsSuccessStatus: 204,
+};
 
 app.use(cors(corsOptions));
 
