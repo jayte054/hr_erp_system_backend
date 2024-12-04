@@ -10,7 +10,10 @@ export const mongoDbConnection = async (): Promise<void> => {
 
     try {
         await mongoose.connect(mongoURI, {
-            autoCreate: true
+            autoCreate: true,
+            ssl: true,
+            tlsAllowInvalidCertificates: false,
+            tlsAllowInvalidHostnames: false,
         });
 
         console.log("Connected to MongoDB successfully.");
