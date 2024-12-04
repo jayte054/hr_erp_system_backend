@@ -12,13 +12,14 @@ const app = express();
 
 // app.use(cors())
 
-app.use(cors({ origin: 'https://hr-erp-system-backend.onrender.com' }));
+app.use(cors({ origin: 'https://hr-erp-system-frontend.onrender.com/' }));
 
 const corsOptions = {
   origin: (origin: any, callback: any) => {
     const allowedOrigins = [
       "https://hr-erp-system-frontend.vercel.app",
       "http://localhost:3000",
+      'http://127.0.0.1:5173'
     ];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
