@@ -38,7 +38,7 @@ const app = express();
 
 const corsOptions = {
     origin: [
-        'https://your-production-frontend-url.com', // Add your production frontend URL
+        'https://hr-erp-system-backend.onrender.com', // Add your production frontend URL
         'http://localhost:3000', // Add localhost for development
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
