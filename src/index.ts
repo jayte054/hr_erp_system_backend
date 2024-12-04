@@ -37,11 +37,12 @@ const app = express();
 // app.options('*', cors(corsOptions))
 
 const corsOptions = {
-    origin: [
-        "https://hr-erp-system-frontend.vercel.app", // Production frontend
-        "http://localhost:3000", // Local frontend
-        "http://127.0.0.1:5173"  // Ensure this matches your dev server URL
-    ],
+    // origin: [
+    //     "https://hr-erp-system-frontend.vercel.app", // Production frontend
+    //     "http://localhost:3000", // Local frontend
+    //     "http://127.0.0.1:5173"  // Ensure this matches your dev server URL
+    // ],
+    origin: '*',
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true // if you need to include cookies in requests
