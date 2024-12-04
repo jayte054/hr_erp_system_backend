@@ -13,7 +13,17 @@ const app = express();
 // app.use(cors());
 
 const corsOptions = {
-  origin: "https://hr-erp-system-frontend.vercel.app/",
+  origin: (origin: any, callback: any) => {
+    const allowedOrigins = [
+      "https://hr-erp-system-frontend.vercel.app",
+      "http://localhost:3000",
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   preFlightContinue: false,
