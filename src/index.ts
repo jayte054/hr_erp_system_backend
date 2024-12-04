@@ -12,41 +12,42 @@ const app = express();
 
 // app.use(cors())
 
-// app.use(cors({ origin: 'https://hr-erp-system-backend.onrender.com' }));
+app.use(cors({ origin: 'https://hr-erp-system-backend.onrender.com' }));
 
-// const corsOptions = {
-//   origin: (origin: any, callback: any) => {
-//     const allowedOrigins = [
-//       "https://hr-erp-system-frontend.vercel.app",
-//       "http://localhost:3000",
-//     ];
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-//   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-//   allowedHeaders: ["Content-Type", "Authorization"],
-//   preFlightContinue: false,
-//   optionsSuccessStatus: 204,
-// };
+const corsOptions = {
+  origin: (origin: any, callback: any) => {
+    const allowedOrigins = [
+      "https://hr-erp-system-frontend.vercel.app",
+      "http://localhost:3000",
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+        console.log(new Error('not allowed by cors'))
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  preFlightContinue: false,
+  optionsSuccessStatus: 204,
+};
 
 // app.use(cors(corsOptions));
 
 // app.options('*', cors(corsOptions))
 
-const corsOptions = {
+// const corsOptions = {
     // origin: [
     //     "https://hr-erp-system-frontend.vercel.app", // Production frontend
     //     "http://localhost:3000", // Local frontend
     //     "http://127.0.0.1:5173"  // Ensure this matches your dev server URL
     // ],
-    origin: '*',
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true // if you need to include cookies in requests
-};
+//     origin: '*',
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     credentials: true // if you need to include cookies in requests
+// };
 
 // Apply CORS middleware
 // app.use(cors(corsOptions));
