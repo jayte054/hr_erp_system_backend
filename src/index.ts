@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import dotenv from 'dotenv';
+import { swaggerDocs } from "./utils/swagger";
 import cors from 'cors';
 import { authRoute, profileRoute } from "./routes";
 import  config  from './config/index';
@@ -9,15 +10,15 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
 
-// const corsOptions = {
-//     origin: "",
-//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//     credentials: true
-// }
+const corsOptions = {
+    origin: "*",
+    methods: ['GET','HEAD','PUT','PATCH','POST','DELETE'],
+    credentials: true
+}
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 mongoDbConnection()
 
@@ -26,7 +27,9 @@ const port = config.PORT;
 // Middleware to parse JSON
 app.use(express.json());
 
-// Sample route
+// swaggerDocs(app);
+
+// route
 app.use('/api/user', authRoute);
 app.use('/api/profile', profileRoute)
 
