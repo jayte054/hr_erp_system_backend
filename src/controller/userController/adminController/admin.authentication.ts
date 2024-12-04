@@ -37,7 +37,7 @@ export const adminSignup = async (req: Request, res: Response): Promise<any> => 
             name,
             email,
             department,
-            role: "employee",
+            role: "admin",
             joiningDate: new Date(),
             salary
         })
@@ -103,7 +103,13 @@ export const adminSignin = async(req: Request, res: Response): Promise<any> =>  
           expiresIn: process.env.JWT_EXPIRATION
         })
 
-        return res.status(200).json({message: 'Sign in successful', token})
+        return res.status(200).json({
+            message: 'Sign in successful', 
+            token,
+            user: {
+                id: admin._id, email: admin.email, role: admin.role, name: admin.name
+            }
+        })
     } catch (error: any) {
         console.error(error);
          signInError(error, res)

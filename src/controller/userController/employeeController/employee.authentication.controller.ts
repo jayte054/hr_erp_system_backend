@@ -111,7 +111,6 @@ export const employeeSignin = async (req: Request, res: Response): Promise<Respo
         if (!employee) {
             return res.status(404).json({message: 'employee not found'})
         }
-
         //compare password
         const comparePassword = await bcrypt.compare(password, employee.password);
         if (!comparePassword) {
@@ -134,7 +133,13 @@ export const employeeSignin = async (req: Request, res: Response): Promise<Respo
         {
           expiresIn: process.env.JWT_EXPIRATION
         })
-        return res.status(200).json({message: 'Sign in successful', token})
+        return res.status(200).json({
+          message: 'Sign in successful', 
+          token,
+          user: {
+            id: employee._id, employeeId: employee.id, email: employee.email, role: employee.role, name: employee.name
+          }
+        })
     } catch (error) {
         return res.status(500).json({message: 'internal server error'})
     }

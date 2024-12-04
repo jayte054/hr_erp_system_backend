@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import jwt from 'jsonwebtoken';
-import { EmployeeProfileModel } from "../../../models/employeeProfileModel"
-import { EmployeeModel } from "../../../models/employeeModel";
+import { EmployeeProfileModel } from "../../models/employeeProfileModel"
+import { EmployeeModel } from "../../models/employeeModel";
 
 export const fetchEmployees = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -13,7 +13,6 @@ export const fetchEmployees = async (req: Request, res: Response): Promise<any> 
         if ( decoded.role === "employee") {
             return res.status(401).json({message: 'user not authorized'})
         }
-
         
          // Default pagination values
         const page = parseInt(req.query.page as string, 10) || 1;
@@ -54,10 +53,11 @@ export const fetchEmployeeById = async (req: Request, res: Response): Promise<an
         if (!decoded) {
             return res.status(401).json({message: 'user not authorized'})
         }
-        const employeeId = req.params.id
-        console.log(employeeId)
+        const email = req.params.email
+        console.log(email)
        
-        const employee: any = await EmployeeProfileModel.findById(employeeId)
+        const employee: any = await EmployeeProfileModel.findOne({email})
+        console.log(employee)
 
         if(decoded.email !== employee.email) {
             return res.status(401).json({message: 'user not allowed to view profile'})
@@ -141,18 +141,21 @@ export const updateEmployeeProfileByAdmin = async (req: Request, res: Response):
         { $set: updateData },
         { new: true, runValidators: true }
       );
-      console.log("mm", updatedEmployeeProfile)
+      
       await updatedEmployeeProfile?.save()
 
       const _employee: any = await EmployeeModel.findOne({id: updatedEmployeeProfile.employeeId})
-      console.log(_employee)
+      
       const updatedEmployee: any = await EmployeeModel.findOne({id: _employee.id})
+      
       const _updatedEmployee: any = await EmployeeModel.findByIdAndUpdate(
         updatedEmployee._id,
         { $set: updateData },
         { new: true, runValidators: true }
       );
-        await _updatedEmployee?.save()
+       
+      await _updatedEmployee?.save()
+
       return res.status(200).json({
         message: "Profile updated successfully.",
         data: _updatedEmployee,
@@ -184,28 +187,35 @@ export const updateEmployeeProfile = async (req: Request, res: Response): Promis
 
     const employeeId = req.params.id;
 
-    const {name, email, department} = req.body;
+    const {name, email, department, joiningDate} = req.body;
     const updateData = {
         name,
         email,
-        department
+        department,
+        joiningDate
     };
 
     if (Object.keys(updateData).length === 0) {
         return res.status(400).json({ message: "No update data provided." });
       }
 
-      const updatedEmployeeProfile = await EmployeeProfileModel.findByIdAndUpdate(
+      const updatedEmployeeProfile: any = await EmployeeProfileModel.findByIdAndUpdate(
         employeeId,
         { $set: updateData },
         { new: true, runValidators: true }
       );
 
-      await EmployeeModel.findByIdAndUpdate(
-        employeeId,
+      const _employee: any = await EmployeeModel.findOne({id: updatedEmployeeProfile.employeeId})
+      
+      const updatedEmployee: any = await EmployeeModel.findOne({id: _employee.id})
+      
+      const _updatedEmployee: any = await EmployeeModel.findByIdAndUpdate(
+        updatedEmployee._id,
         { $set: updateData },
         { new: true, runValidators: true }
       );
+       
+      await _updatedEmployee?.save()
 
       return res.status(200).json({
         message: "Profile updated successfully.",
@@ -213,6 +223,7 @@ export const updateEmployeeProfile = async (req: Request, res: Response): Promis
       });
     
     }catch (error) {
+        console.log(error)
         return res.status(500).json({ message: "An error occurred while updating the employee." });
     }
 }
@@ -234,7 +245,7 @@ export const deleteEmployeeProfile = async (req: Request, res: Response): Promis
         }
     
     
-        const employeeId = decoded._id;
+        const employeeId = req.params.id;
 
         await EmployeeProfileModel.findByIdAndDelete(employeeId)
         await EmployeeModel.findByIdAndDelete(employeeId)
