@@ -5,8 +5,8 @@ import swaggerUi from "swagger-ui-express";
 import path from "path";
 
 const profile = path.resolve(__dirname, "../routes/profile.route.ts");
-const auth = path.resolve(__dirname, "../src/routes/auth.ts");
-const apiSchema = path.resolve(__dirname, "../src/models/*.ts");
+const auth = path.resolve(__dirname, "../routes/authentication.route.ts");
+const apiSchema = path.resolve(__dirname, "../models/*.ts");
 
 const options: swaggerJSDoc.Options = {
   definition: {
@@ -30,7 +30,7 @@ const options: swaggerJSDoc.Options = {
         bearerAuth: [],
       },
     ],
-    host: "localhost:7000",
+    host: `localhost:3001${config.PORT}`,
     basePath: "/",
   },
   apis: [apiSchema, profile, auth],
@@ -38,7 +38,6 @@ const options: swaggerJSDoc.Options = {
 
 const swaggerSpec = swaggerJSDoc(options);
 
-//
 export const swaggerDocs = (app: Application) => {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   app.get("/docs.json", (req: Request, res: Response) => {
@@ -46,5 +45,5 @@ export const swaggerDocs = (app: Application) => {
     res.send(swaggerSpec);
   });
 
-  console.log(`Docs available at https://localhost:${config.PORT}/api-docs`);
+  console.log(`Docs available at http://localhost:${config.PORT}/api-docs`);
 };
