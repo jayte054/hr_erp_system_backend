@@ -36,16 +36,12 @@ const app = express();
 
 // app.options('*', cors(corsOptions))
 
-const corsOptions = {
-    origin: [
-        'https://hr-erp-system-backend.onrender.com', // Add your production frontend URL
-        'http://localhost:3000', // Add localhost for development
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-};
-
-app.use(cors(corsOptions));
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://hr-erp-system-backend.onrender.com');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
 
 mongoDbConnection()
 
