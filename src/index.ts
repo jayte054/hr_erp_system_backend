@@ -37,10 +37,14 @@ const app = express();
 // app.options('*', cors(corsOptions))
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://hr-erp-system-backend.onrender.com');
+    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5173/');
     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
+    if (req.method === 'OPTIONS') {
+        res.status(204).end(); // Respond with success for preflight
+    } else {
+        next();
+    }
 });
 
 mongoDbConnection()
