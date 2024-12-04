@@ -8,6 +8,7 @@ import { EmployeeProfileModel } from '../../../models/employeeProfileModel';
 
 export const adminSignup = async (req: Request, res: Response): Promise<any> => {
     try {
+        console.log(req.body)
         const {name, email, password, department,salary} = req.body;
 
         const salt = await bcrypt.genSalt();
@@ -19,7 +20,7 @@ export const adminSignup = async (req: Request, res: Response): Promise<any> => 
         const hashedPassword = await generatePassword(password, salt);
 
         const checkAdmin = await AdminModel.findOne({where: email})
-
+        console.log(checkAdmin)
         if (!checkAdmin) {
         const newAdmin: Admin = new AdminModel({
             id: uuid(),
