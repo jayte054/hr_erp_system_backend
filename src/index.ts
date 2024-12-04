@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors())
+// app.use(cors())
 
 // app.use(cors({ origin: 'https://hr-erp-system-backend.onrender.com' }));
 
@@ -35,6 +35,17 @@ app.use(cors())
 // app.use(cors(corsOptions));
 
 // app.options('*', cors(corsOptions))
+
+const corsOptions = {
+    origin: [
+        'https://your-production-frontend-url.com', // Add your production frontend URL
+        'http://localhost:3000', // Add localhost for development
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+};
+
+app.use(cors(corsOptions));
 
 mongoDbConnection()
 
