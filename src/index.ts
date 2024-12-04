@@ -49,7 +49,7 @@ const corsOptions = {
 };
 
 // Apply CORS middleware
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 mongoDbConnection()
 
@@ -57,6 +57,8 @@ const port = config.PORT;
 
 // Middleware to parse JSON
 app.use(express.json());
+app.use(cors(corsOptions));
+
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
     // console.log('Request URL:', req.url);
