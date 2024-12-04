@@ -15,10 +15,14 @@ const app = express();
 const corsOptions = {
     origin: "*",
     methods: ['GET','HEAD','PUT','PATCH','POST','DELETE'],
-    credentials: true
+    allowedHeaders : ['Content-Type', 'Authorization'],
+    preFlightContinue : false,
+    optionsSuccessStatus : 204
 }
 
 app.use(cors(corsOptions));
+
+app.options('*', cors(corsOptions))
 
 mongoDbConnection()
 
