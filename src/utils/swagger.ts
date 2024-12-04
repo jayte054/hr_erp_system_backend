@@ -30,7 +30,7 @@ const options: swaggerJSDoc.Options = {
         bearerAuth: [],
       },
     ],
-    host: `localhost:3001${config.PORT}`,
+    host: process.env.HOST || `localhost:3001${config.PORT}`,
     basePath: "/",
   },
   apis: [apiSchema, profile, auth],
