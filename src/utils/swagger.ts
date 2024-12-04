@@ -12,9 +12,9 @@ const options: swaggerJSDoc.Options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Swagger API Documentation for Smooze App",
+      title: "Swagger API Documentation for HR App",
       version: "1.0.0",
-      description: "Documenting various apis for Smooze App",
+      description: "Documenting various apis for HR",
     },
     components: {
       securitySchemas: {

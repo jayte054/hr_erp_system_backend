@@ -36,16 +36,19 @@ const app = express();
 
 // app.options('*', cors(corsOptions))
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5173');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    if (req.method === 'OPTIONS') {
-        res.status(204).end(); // Respond with success for preflight
-    } else {
-        next();
-    }
-});
+const corsOptions = {
+    origin: [
+        "https://hr-erp-system-frontend.vercel.app", // Production frontend
+        "http://localhost:3000", // Local frontend
+        "http://127.0.0.1:5173"  // Ensure this matches your dev server URL
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true // if you need to include cookies in requests
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions));
 
 mongoDbConnection()
 
@@ -61,7 +64,7 @@ app.use((req, res, next) => {
     console.log('Request Body:', req.body); // Check parsed body
     next();
 });
-// swaggerDocs(app);
+swaggerDocs(app);
 
 // route
 app.use('/api/user', authRoute);
