@@ -10,7 +10,9 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin: 'https://hr-erp-system-backend.onrender.com' }));
+app.use(cors())
+
+// app.use(cors({ origin: 'https://hr-erp-system-backend.onrender.com' }));
 
 // const corsOptions = {
 //   origin: (origin: any, callback: any) => {
