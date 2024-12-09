@@ -74,6 +74,7 @@ export const adminEmployeeSignup = async (req: Request, res: Response): Promise<
 };
 
 export const changePassword = async (req: Request, res: Response): Promise<Response | any> => {
+  console.log(req.body)
     const {currentPassword, newPassword} = req.body;
     const employeeId= req.params.id
     try {
@@ -97,6 +98,7 @@ export const changePassword = async (req: Request, res: Response): Promise<Respo
         return res.status(200).json({message: 'Password successfully changed'})
 
     } catch(error) {
+      console.log(error)
         return res.status(500).json({ message: 'Internal server error' });
 
     }

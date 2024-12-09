@@ -10,9 +10,23 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin : '*'}))
+// app.use(cors({ origin : '*'}))
 
 app.options('*', cors())
+
+const allowedOrigins = [`https://hr-erp-system-frontend.vercel.app`]
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if(!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not Allowed by Cors'))
+        }
+    },
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
+    credentials: true,
+}))
 
 // app.use(cors({ origin: 'https://hr-erp-system-frontend.onrender.com/' }));
 
